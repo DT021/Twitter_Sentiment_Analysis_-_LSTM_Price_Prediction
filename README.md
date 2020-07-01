@@ -26,6 +26,34 @@
 	- regression analysis
 	- deep learning model
 
+#### Use cases of AI in Fintech
+- Fraud detection and prevention
+    - logistic regression
+    - support vector machines
+    - neural networks
+    - naive bayes
+- Stock market prediction
+    - neural networks
+    - k-nearest neighbors regression
+    - decision tree regressor
+    - bagging regressor
+    - gradient descent regression
+- Algorithmic trading
+    - recurrent neural networks (RNN)
+    - long short term network (LSTM)
+    - ensemble algorithms
+    - support vector machines
+- customer service and recommendation
+Source
+- https://pirimidtech.com/top-6-fintech-use-cases-of-machine-learning/
+
+- digital financial coach/advisor
+    - natural language processing (NLP)
+- transaction search and visualization
+- client risk profile
+Source
+- https://towardsdatascience.com/ten-applications-of-ai-to-fintech-22d626c2fdac
+
 ### Chosen idea
 
 
