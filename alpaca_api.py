@@ -4,10 +4,10 @@ import os, websocket, json
 # constants
 ALPACA_API_KEY = os.getenv('ALPACA_API_KEY')
 ALPACA_SECRET_KEY = os.getenv('ALPACA_SECRET_KEY')
-ALPACA_API_BASE_URL = 'https://paper-api.alpaca.markets/'
-ALPACA_API_DATA_URL = 'https://data.alpaca.markets'
-ALPCA_WS_URL = 'wss://data.alpaca.markets/stream'
-POLYGON_WS_URL = 'wss://alpaca.socket.polygon.io/stocks	'
+# ALPACA_API_BASE_URL = 'https://paper-api.alpaca.markets/'
+# ALPACA_API_DATA_URL = 'https://data.alpaca.markets'
+ALPACA_WS_URL = 'wss://data.alpaca.markets/stream'
+# POLYGON_WS_URL = 'wss://alpaca.socket.polygon.io/stocks	'
 
 api = tradeapi.REST(
     ALPACA_API_KEY,
@@ -47,7 +47,7 @@ def on_close(ws):
     print('closed connection')
 
 ws = websocket.WebSocketApp(
-    ALPACA_API_DATA_URL,
+    ALPACA_WS_URL,
     on_open=on_open,
     on_message=on_message,
     on_close=on_close
