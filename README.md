@@ -1,4 +1,4 @@
-# FINTECH-Project-02
+# FINTECH-Project-02 (Team 9)
 
 ## Members
 - Shubhra Bhatnagar
