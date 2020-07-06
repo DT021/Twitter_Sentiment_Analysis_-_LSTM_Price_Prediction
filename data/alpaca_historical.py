@@ -1,25 +1,26 @@
-import alpaca_trade_api, config, requests, json
+import alpaca_trade_api as tradeapi
+import config
 from datetime import datetime, timedelta, date
 
-#initiate trading api for orders, etc.
-# api = tradeapi.REST(
-#     ALPACA_API_KEY,
-#     ALPACA_SECRET_KEY,
-#     api_version='v2'
-#     )
+# initiate trading api for orders, etc.
+api = tradeapi.REST(
+    config.API_KEY,
+    config.SECRET_KEY,
+    api_version='v2'
+    )
 
-timeframe = '5Min' #1Min, 5Min, 15Min, 1D
-tickers = 'MSFT' #include tickers in same quotes separated by commas
+timeframe = '1D' #1Min, 5Min, 15Min, 1D
+tickers = ['MSFT', 'AAPL', 'BRK.B']
 limit = '1000' #between 1 and 1000. default is 100.
 end_date = date.today()
-end_str = end_date.isoformat() + 'T09:30:00-04:00' #ISO Format, ex: '2019-04-15T09:30:00-04:00'
-start_date = end_date - timedelta()
-start_str = start_date.isoformat() + 'T09:30:00-04:00' #ISO Format, ex: '2019-04-15T09:30:00-04:00'
+start_date = end_date - timedelta(365)
 
-bars_url = config.API_DATA_URL + \
-    f'/v1/bars/{timeframe}?symbols={tickers}&limit={limit}&\
-        start={start_str}&end={end_str}'
-
-r = requests.get(bars_url, headers=config.HEADERS)
-
-print(json.dumps(r.json(), indent=4))
+stocks_history = api.get_barset(
+    symbols=tickers,
+    timeframe=timeframe,
+    limit=limit,
+    start=start_date,
+    end=end_date,
+    after=None,
+    until=None
+).df
