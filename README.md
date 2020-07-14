@@ -12,13 +12,11 @@ An ML-backed robo advisory platform that provides insights on when to buy and/or
 A functioning algo trading model based on one of the deep learning models and/or NLP with static vizualizations.
 
 ### Technologies used
-- AWS Cloud
-	- Lex
-	- Lambda
+- AWS Cloud/Azure
 	- Sagemaker
 - Twitter API
 - Alpaca (or some other broker) API
-- Google Colab
+- Google Colab/Azure
 
 ### Tickers to use for analysis and model building
 - AAPL
@@ -27,10 +25,10 @@ A functioning algo trading model based on one of the deep learning models and/or
 ## Outline
 
 ### Build, train and test models
-Build the models for sentiment analysis (using NLP), as well as price prediction (using regression and deep learning). After training the models, generate signals to buy/sell/hold the stock 
+Build the models for twitter sentiment analysis (using RNN LSTM), as well as price prediction (using regression and deep learning). After training the models, generate signals to buy/sell/hold the stock 
 
 **Models used for sentiment analysis:**
-- recurrent neural networks (RNN)
+- recurrent neural networks (RNN LSTM) 
 - Vader
 
 **Models to be used for price prediction:**
