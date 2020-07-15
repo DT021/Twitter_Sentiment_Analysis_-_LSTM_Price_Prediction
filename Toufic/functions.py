@@ -7,21 +7,29 @@ import requests, time
 from pathlib import Path
 
 def get_stock_closing_prices(symbols, output_size='full', name='stocks_history', api_key=config.ALPHA_VANTAGE_API): #symbol must be a list
+    """
+    function=TIME_SERIES_INTRADAY
+    interval (required): 1min, 5min, 15min, 30min, 60min
+    outputsize (required): compact = last 100 data points, full = all data
+    
+    function=TIME_SERIES_DAILY
+    outputsize (optional): compact = last 100 data points, full = all data
+    """
     # constants
     BASE_URL = 'https://www.alphavantage.co/query?function='
-    FUNCTION = 'TIME_SERIES_DAILY' #returns daily data vs. intraday data
     
-    # create dataframe for data
     df = pd.DataFrame()
-    # set parameters
     symbols = symbols
     output_size = output_size
-    
-    # loop through tickers and sent GET request to API
+    interval = kwargs.get('interval', None)
     for symbol in symbols:
         # set request URL for GET request
-        request_URL = BASE_URL + \
-f'{FUNCTION}&symbol={symbol}&outputsize={output_size}&apikey={api_key}'
+        if interval == None:
+            request_URL = BASE_URL + \
+f'{function}&symbol={symbols}&outputsize={output_size}&apikey={api_key}'
+        else:
+            request_URL = BASE_URL + \
+f'{function}&symbol={symbols}&interval={interval}&outputsize={output_size}&apikey={api_key}'
         # send GET request
         r = requests.get(request_URL)
         # create dataframe from GET response (transpose dataframe, as response flips
@@ -265,3 +273,48 @@ def scale_and_reshape_data(X, y=None):
     
     X = X.reshape((X.shape[0], X.shape[1], 1))
     return X
+
+def predict_prices(
+    df,
+    window,
+    feature_col_number,
+    target_col_number,
+    model_path,
+    predictions_path
+):
+    
+    # chunk data with a rolling window
+    X, y = window_data(
+        df=df,
+        window=window,
+        feature_col_number=feature_col_number,
+        target_col_number=target_col_number
+    )
+    
+    # scale data
+    scaler = MinMaxScaler()
+    X = scaler.fit(X)
+    X = scaler.transform(X)
+    y = scaler.fit(y)
+    y = scaler.transform(y)
+
+    X = X.reshape((X.shape[0], X.shape[1], 1))
+    
+    # load model
+    model = load_model(model_path)
+
+    # predict prices
+    predicted = model.predict(X)
+
+    # Recover the original prices instead of the scaled version
+    predicted_prices = scaler.inverse_transform(predicted)
+    real_prices = scaler.inverse_transform(y.reshape(-1, 1))
+
+    predictions = pd.DataFrame({
+    "Real": real_prices.ravel(),
+    "Predicted": predicted_prices.ravel()
+    })
+
+    predictions.to_csv(Path(predictions_path))
+    
+    return predictions
