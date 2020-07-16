@@ -265,14 +265,14 @@ def scale_and_reshape_data(X, y=None):
     scaler = MinMaxScaler()
     scaler.fit(X)
     X = scaler.transform(X)
-    if y != None:
+    if y.all() != None:
         scaler.fit(y)
         y = scaler.transform(y)
         X = X.reshape((X.shape[0], X.shape[1], 1))
-        return X, y
+        return X, y, scaler
     
     X = X.reshape((X.shape[0], X.shape[1], 1))
-    return X
+    return X, scaler
 
 def predict_prices(
     df,
@@ -283,6 +283,8 @@ def predict_prices(
     predictions_path
 ):
     
+    from tensorflow.keras.models import model_from_json, load_model
+    
     # chunk data with a rolling window
     X, y = window_data(
         df=df,
@@ -292,13 +294,7 @@ def predict_prices(
     )
     
     # scale data
-    scaler = MinMaxScaler()
-    X = scaler.fit(X)
-    X = scaler.transform(X)
-    y = scaler.fit(y)
-    y = scaler.transform(y)
-
-    X = X.reshape((X.shape[0], X.shape[1], 1))
+    X, y, scaler = scale_and_reshape_data(X=X, y=y)
     
     # load model
     model = load_model(model_path)
@@ -310,10 +306,13 @@ def predict_prices(
     predicted_prices = scaler.inverse_transform(predicted)
     real_prices = scaler.inverse_transform(y.reshape(-1, 1))
 
-    predictions = pd.DataFrame({
-    "Real": real_prices.ravel(),
-    "Predicted": predicted_prices.ravel()
-    })
+    predictions = pd.DataFrame(
+        index=df[window+1:].index,
+        data = {
+            "Real": real_prices.ravel(),
+            "Predicted": predicted_prices.ravel()
+        }
+    )
 
     predictions.to_csv(Path(predictions_path))
     
