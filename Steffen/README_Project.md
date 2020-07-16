@@ -1,12 +1,13 @@
-# **Analyzing Stock Prices: Linear Regression, LTSM and RNN Sentiment Analysis**
-*A machine learning and advisory platform for stock analysis by Shubra Bhatnagar, Toufic Lawand and Steffen Westerburger* 
+**Trading and Analysis of Equities based on Proprietary Deep Neural Network Models**
+*A Deep Neural Network advisory platform that provides price signals and live proprietary financial Twitter senitments for equity trading by Shubra Bhatnagar, Toufic Lawand and Steffen Westerburger* 
 
 ![Picture](https://s3.amazonaws.com/prod-www-blackline-com/blog/wp-content/uploads/2019/01/29163118/A-Conversation-With-BlackLines-Machine-Learning-Experts.jpg)
 
 ## **Introduction** 
 
-In this project our main aim is to develop a machine learning backed dashboard that provides insights in (future) stock prices.
+We developed a Deep Neural Network advisory platform that provides price signals and live proprietary financial Twitter senitments for equity trading.
 
+We also compared it with the standard regression model
 This is done two different and complimentary ways:
 
 1) We designed, developed, trained and tested a long short-term memory (LSTM) model and a linear regression model. Those models enable us to make predicitions on future stock prices based on historical data.
