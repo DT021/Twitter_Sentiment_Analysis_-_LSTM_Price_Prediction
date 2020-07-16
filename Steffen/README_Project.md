@@ -1,4 +1,5 @@
-**Trading and Analysis of Equities based on Proprietary Deep Neural Network Models**
+# Trading & Analysis of Stocks based on Proprietary Deep Neural Network Models
+
 *A Deep Neural Network advisory platform that provides price signals and live proprietary financial Twitter senitments for equity trading by Shubra Bhatnagar, Toufic Lawand and Steffen Westerburger* 
 
 ![Picture](https://s3.amazonaws.com/prod-www-blackline-com/blog/wp-content/uploads/2019/01/29163118/A-Conversation-With-BlackLines-Machine-Learning-Experts.jpg)
