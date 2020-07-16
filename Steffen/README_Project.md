@@ -9,39 +9,40 @@ In this project our main aim is to develop a machine learning backed dashboard t
 
 This is done two different and complimentary ways:
 
-1) We designed, developed, trained and tested along short-term memory (LSTM) model and a linear regression model. Those models enable us to make predicitions on future stock prices based on historical data.
+1) We designed, developed, trained and tested a long short-term memory (LSTM) model and a linear regression model. Those models enable us to make predicitions on future stock prices based on historical data.
 
-2) We designed, developed, trained and tested a recurrent neural network (RNN) specifically focused on sentiment analysis of tweets on Twitter. This model is uniquely equipped to determine the sentiment of tweets that are talking about individual stocks and classifies the core message as either 'positive' or 'negative'.
+2) We designed, developed, trained and tested a long short-term memory (LSTM) model  specifically focused on sentiment analysis of tweets on Twitter. This model is uniquely equipped to determine the sentiment of tweets that are talking about individual stocks and classifies the core message as either 'positive' or 'negative'.
 
-Those two approached care combined in a comprehensive dashboard that gives any investor, from individual to big corporation, a powerful tool to predict developments in the stock market.
+These two approaches are combined in a comprehensive dashboard that gives any investor, from individual to big corporation, a powerful tool to predict developments in the stock market.
+
+### *Data and challenges we ran into during the exploration and clean up process*
+
+For the first part of the project we used historical stock data provided to us by the Alpaca (?) API. We randomly selected six different stocks (MSFT, AMD, TSLA, JNJ, REGN, GILD). 
 
 
 
-
-The main research question 
-
-
-Brief Summary of Findings 
-
-### * Data and challenges we ran into during the exploration and clean up process *
 
 ## **Data Analysis: Findings** 
 
 Below we will zoom in on the three model that we used in this project. 
 
 
-### **Model 1: Predicting stock prices using linear regression**
+### **Model 1: Predicting stock prices using sklearn linear regression**
 
 
 
 
-### **Model 2: Predicitng stock prices using LSTM**
+### **Model 2: Predicitng stock prices LSTM using Tensorflow/Keras**
 add screenshot of graph and summary of findings/use
 
-### **Model 3: Twitter sentiment anlysis using RNN**
+evaluation and training of models
+
+### **Model 3: Twitter sentiment analysis LSTM using Tensorflow/Keras/NLTK**
 add screenshot of graph and summary of findings/use
 
-
+- Tweepy / Twitter API
+- Hand coding tweets / difficulties training the model
+- integrating it into dashboard
 
 
 ## ** Discussion of Findings **
