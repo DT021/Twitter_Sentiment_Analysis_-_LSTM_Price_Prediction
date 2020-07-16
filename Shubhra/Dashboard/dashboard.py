@@ -23,12 +23,14 @@ import plotly.graph_objects as go
 from bokeh.themes.theme import Theme
 import holoviews as hv
 
-
-
 #Local module
 import sys
 sys.path.append('../')
+sys.path.append('../../')
 sys.path.append('../Twitter')
+
+import Toufic.price_predictions as price_model
+
 
 # from Twitter import config as tw
 import sqlite3
@@ -36,7 +38,9 @@ import time
 import os.path
 import os
 
-def initialize(cash=None):
+
+
+def initialize():
     """Initialize the dashboard"""
     tweets_stream = Stream()
     columns = ['created_at', 'user_name', 'tweets', 'sentiments', 'polarity']
@@ -44,17 +48,26 @@ def initialize(cash=None):
     tweets_example = pd.DataFrame(
         data=data, columns=columns)
     
+    
     tweets_df = DataFrame(tweets_stream, example=tweets_example) 
     
-    # Initialize Streaming DataFrame for the signals
-    dashboard = build_dashboard(tweets_df)
+    # Initialize Streaming DataFrame for Signals
     
-    return tweets_stream, dashboard
+    price_stream = Stream()
+    predictions_example = pd.DataFrame({'Date':[],'MSFT_actual':[], 'MSFT_lstm':[], 'MSFT_regression':[]})
+
+    
+#     predictions_example = pd.DataFrame({'MSFT_actual':[], 'MSFT_lstm':[], 'MSFT_regression':[]}, columns=['MSFT_actual','MSFT_lstm','MSFT_regression'], index=pd.DatetimeIndex([]))
+                                                                                                                      
+    predictions_streamz_df = DataFrame(price_stream, example=predictions_example)
+
+    # Initialize Streaming DataFrame for the signals
+    dashboard = build_dashboard(tweets_df, predictions_streamz_df)
+    
+    return tweets_stream, price_stream, dashboard
 
 
-
-
-def build_dashboard(tweets):
+def build_dashboard(tweets,predictions_streamz_df):
     """Build the dashboard. changes the css, styles and creates empty place holders for tables, tweets and graphs """
     
     template = """
@@ -70,7 +83,7 @@ def build_dashboard(tweets):
     {{ app_title }}
     <p/>
     <p style="text-align:center;">
-    <img src="https://user-images.githubusercontent.com/4336187/87214331-6d9ef280-c2f9-11ea-9c87-231f5c828a4e.png" height='90'>
+    <img src="https://user-images.githubusercontent.com/4336187/87214331-6d9ef280-c2f9-11ea-9c87-231f5c828a4e.png" height='108'>
     </p>
     
     <br>
@@ -78,13 +91,14 @@ def build_dashboard(tweets):
       <div class="row"> 
         <div class="col-sm">
           {{ embed(roots.B) }}
-        </div>
-   
+        </div> 
       </div>
+    <div class="container">
       <div class="row"> 
         <div class="col-sm">
           {{ embed(roots.C) }}
-        </div>
+        </div> 
+      </div>
    
       </div>
     </div>
@@ -113,8 +127,8 @@ def build_dashboard(tweets):
         json={
         'attrs' : {
             'Figure' : {
-                'background_fill_color': '#2F2F2F',
-                'border_fill_color': '#2F2F2F',
+                'background_fill_color': 'black',
+                'border_fill_color': 'black',
                 'outline_line_color': '#444444',
             },
             'Grid': {
@@ -144,6 +158,15 @@ def build_dashboard(tweets):
         ).opts(bgcolor='blue',height=272),
     css_classes=['panel-widget-box'])
 
+    
+
+    
+    
+    price = pn.Column(
+        "##### Pricing Model",
+        predictions_streamz_df.hvplot.line(width=1400, grid=True, backlog=500,title="prices").opts( bgcolor='black', legend_position='right'))
+    
+ 
    
     positive_cloud = pn.Column(
     "##### Postive Word Cloud:", pn.pane.PNG('Images/postive_sentiments.png', height=272))
@@ -151,31 +174,33 @@ def build_dashboard(tweets):
     negative_cloud = pn.Column(
     "##### Negative Word Cloud:", pn.pane.PNG('Images/negative_sentiments.png', height=272))
     
-    button = pn.widgets.Button(name='Refresh', button_type='primary')
-    button.on_click(b)
     
     clouds = pn.Row(
         positive_cloud,negative_cloud
     )
     
-    refresh_button = pn.Column(clouds, button)
-    
     sentiments = pn.Row(
-        tweets_table,refresh_button
+        tweets_table, clouds
     )
-
     
     
 #     dashboard.add_panel('B',tweets_table)
     dashboard.add_panel('B',sentiments)
-    dashboard.add_panel('C',"")
+    dashboard.add_panel('C',price)
 
     
     return dashboard
 
 
-def b(event):
-    print('Refresh Data$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    
+def price_data():
+    global i
+    price_df = price_model.combined_predictions()
+#     price_df.set_index('Date', inplace=True)
+#     print(f'{price_df}')
+    small_df = price_df.copy() #.iloc[i:i+10] 
+
+    return small_df
 
 def twitter_data():
     global counter
@@ -200,33 +225,29 @@ def twitter_data():
         
     return df
 
-async def current_price():
-    print(f"price data")
-
-async def sentiment_data():
-    print("sentiment data")
     
-async def count():
-    print("One")
-#     await asyncio.sleep(1)
-    print("Two")
-    
-tweets_stream, dashboard = initialize()
+tweets_stream, price_stream, dashboard = initialize()
 dashboard.servable()
 
 db_name = "twitter_sentiments.db"
 db_name = os.path.abspath('../Twitter/twitter_sentiments.db')
 print(db_name)
 db = sqlite3.connect(db_name, timeout=10)
-
+i=0
+from streamz.dataframe import Random
 async def main():
-    
+   
+    global i
     global tweets_stream
+    global price_stream
     global counter
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop() 
+    
+    price_df = price_data()
+    price_stream.emit(price_df)
     while (True):
-#         tweets_df = await twitter_data()
-#         tweets_df = await loop.run_in_executor(None, fetch_data)
+
+        #twitter feed
         tweets_df = twitter_data()
         if (tweets_df.empty):
             pass
@@ -234,6 +255,9 @@ async def main():
             tweets_stream.emit(tweets_df)
             counter += 1 
             print(f"tweets {tweets_df}")
+            
+            
+            
         await asyncio.sleep(1)
     
 counter = 1
