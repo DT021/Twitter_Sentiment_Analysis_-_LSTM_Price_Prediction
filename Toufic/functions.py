@@ -6,7 +6,7 @@ import data.config as config
 import requests, time
 from pathlib import Path
 
-def get_stock_closing_prices(symbols, output_size='full', name='stocks_history', api_key=config.ALPHA_VANTAGE_API): #symbol must be a list
+def get_stock_closing_prices(symbols, output_size='full', function='TIME_SERIES_DAILY', name='stocks_history', api_key=config.ALPHA_VANTAGE_API, *args, **kwargs): #symbol must be a list
     """
     function=TIME_SERIES_INTRADAY
     interval (required): 1min, 5min, 15min, 30min, 60min
@@ -205,7 +205,7 @@ def two_lstm(df, feature_column, target_column, window_size, batch_size, dropout
         )
     model.add(Dropout(dropout_fraction))
     # Layer 2
-    model.add(LSTM(units=row['window size']))
+    model.add(LSTM(units=window_size))
     model.add(Dropout(dropout_fraction))
     # Output layer
     model.add(Dense(1))

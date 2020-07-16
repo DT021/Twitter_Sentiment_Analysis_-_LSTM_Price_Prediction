@@ -6,7 +6,7 @@ import data.config as config
 import requests, time
 from pathlib import Path
 
-def get_stock_closing_prices(symbols, output_size='full', name='stocks_history', api_key=config.ALPHA_VANTAGE_API): #symbol must be a list
+def get_stock_closing_prices(symbols, output_size='full', function='TIME_SERIES_DAILY', name='stocks_history', api_key=config.ALPHA_VANTAGE_API, *kwargs): #symbol must be a list
     """
     function=TIME_SERIES_INTRADAY
     interval (required): 1min, 5min, 15min, 30min, 60min
