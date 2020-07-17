@@ -25,15 +25,14 @@ These two approaches are combined in a comprehensive dashboard that gives any in
 ##### Packages used:
 
 
-pandas
-numpy
-sklearn
-nltk
-tensorflow.keras
-regex
-wordcloud
-from sklearn
-pickle
+- pandas
+- numpy
+- sklearn
+- nltk
+- tensorflow.keras
+- regex
+- wordcloud
+- pickle
 
 ##### APIs used
 
@@ -42,7 +41,7 @@ Alpaca API
 Tweepy API
 
 ##### Cloud computing service
-Trained the model using Microsoft `***Azure Cloud Notebook***`(Refer to the setup guide in the `Docs` Folder([a relative link](Docs/NotebookAzure.docx))
+Trained the model using Microsoft `***Azure Cloud Notebook***`(Refer to the setup guide in the `Docs` Folder.
 
 
 ---
