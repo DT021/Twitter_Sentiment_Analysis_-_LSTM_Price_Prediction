@@ -36,9 +36,9 @@ These two approaches are combined in a comprehensive dashboard that gives any in
 
 ##### APIs used
 
-Alpha Vantage API
-Alpaca API
-Tweepy API
+- Alpha Vantage API
+- Alpaca API
+- Tweepy API
 
 ##### Cloud computing service
 Trained the model using Microsoft `***Azure Cloud Notebook***`(Refer to the setup guide in the `Docs` Folder.
