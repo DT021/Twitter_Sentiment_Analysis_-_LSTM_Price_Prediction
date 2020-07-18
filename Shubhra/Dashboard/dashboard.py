@@ -54,7 +54,7 @@ def initialize():
     # Initialize Streaming DataFrame for Signals
     
     price_stream = Stream()
-    predictions_example = pd.DataFrame({'Date':[],'MSFT_actual':[], 'MSFT_lstm':[], 'MSFT_regression':[]})
+    predictions_example = pd.DataFrame({'Date':[],'actual':[], 'lstm':[], 'regression':[]})
 
     
 #     predictions_example = pd.DataFrame({'MSFT_actual':[], 'MSFT_lstm':[], 'MSFT_regression':[]}, columns=['MSFT_actual','MSFT_lstm','MSFT_regression'], index=pd.DatetimeIndex([]))
@@ -196,9 +196,10 @@ def build_dashboard(tweets,predictions_streamz_df):
 def price_data():
     global i
     price_df = price_model.combined_predictions()
-#     price_df.set_index('Date', inplace=True)
-#     print(f'{price_df}')
-    small_df = price_df.copy() #.iloc[i:i+10] 
+    print(f'{price_df}')
+    small_df = price_df.rename(columns={'MSFT_actual': 'actual', 'MSFT_lstm': 'lstm','MSFT_regression':'regression' })
+    
+    print(f'{price_df}')
 
     return small_df
 
