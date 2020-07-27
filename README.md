@@ -54,7 +54,7 @@ Trained the model using Microsoft `***Azure Cloud Notebook***`(Refer to the setu
 
 
 ### **Model 1: Predicting stock prices using sklearn linear regression**
-
+We created a sklearn linear regression model to have a benchmark to compare the LSTM model performance to. We trained and tested the linear regression model for price prediction, using the same data as our LSTM price prediction model.
 
 
 ### **Model 2: Predicitng stock prices LSTM using Tensorflow/Keras**
